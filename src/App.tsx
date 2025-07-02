@@ -70,7 +70,7 @@ function App() {
       return;
     }
     try {
-      const res:any = await axios.post(`${backendUrl}/messages/send`, { channel, message });
+      await axios.post(`${backendUrl}/messages/send`, { channel, message });
       showSuccess('Message sent successfully');
     } catch {
       showAlert('Failed to send message');

@@ -11,8 +11,8 @@ function App() {
   const [success, setSuccess] = useState('');
   const [channels, setChannels] = useState<any[]>([]);
 
-
-  useEffect(() => {
+  const backendUrl:any = import.meta.env.VITE_API_END;
+  useEffect(() => {    
     checkConnection();
     loadScheduled();
   }, []);
@@ -25,7 +25,7 @@ function App() {
 
   const loadChannels = async () => {
     try {
-      const res = await axios.get('http://localhost:5001/messages/channels');
+      const res:any = await axios.get(`${backendUrl}/messages/channels`);
       console.log(res);
 
       const filtered = res.data.filter((ch: any) => ch.is_channel && ch.is_member);
@@ -38,7 +38,7 @@ function App() {
 
   const checkConnection = async () => {
     try {
-      const res = await axios.get('http://localhost:5001/auth/status');
+      const res:any = await axios.get(`${backendUrl}/auth/status`);
       setIsConnected(res.data.connected);
     } catch {
       setIsConnected(false);
@@ -47,7 +47,7 @@ function App() {
 
   const disconnectSlack = async () => {
     try {
-      await axios.post('http://localhost:5001/auth/disconnect');
+      await axios.post(`${backendUrl}/auth/disconnect`);
       showSuccess('Disconnected from Slack');
       setIsConnected(false);
     } catch {
@@ -57,7 +57,7 @@ function App() {
 
   const loadScheduled = async () => {
     try {
-      const res = await axios.get('http://localhost:5001/messages/scheduled');
+      const res:any = await axios.get(`${backendUrl}/messages/scheduled`);
       setScheduled(res.data);
     } catch {
       setScheduled([]);
@@ -70,7 +70,7 @@ function App() {
       return;
     }
     try {
-      const res = await axios.post('http://localhost:5001/messages/send', { channel, message });
+      const res:any = await axios.post(`${backendUrl}/messages/send`, { channel, message });
       showSuccess('Message sent successfully');
     } catch {
       showAlert('Failed to send message');
@@ -90,7 +90,7 @@ function App() {
       showAlert('Scheduled time must be in the future');
       return;
     }
-    axios.post('http://localhost:5001/messages/schedule', {
+    axios.post(`${backendUrl}/messages/schedule`, {
       channel,
       message,
       scheduledTime: time,
@@ -101,7 +101,7 @@ function App() {
   };
 
   const cancel = (id: number) => {
-    axios.delete(`http://localhost:5001/messages/scheduled/${id}`).then(loadScheduled);
+    axios.delete(`${backendUrl}/messages/scheduled/${id}`).then(loadScheduled);
   };
 
   const showAlert = (msg: string) => {

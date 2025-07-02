@@ -130,7 +130,7 @@ function App() {
       {!isConnected ? (
         <div className="text-center">
           <button
-            onClick={() => window.location.href = 'http://localhost:5001/auth/slack'}
+            onClick={() => window.location.href = `${backendUrl}/auth/slack`}
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded shadow"
           >
             Connect to Slack
